@@ -1,0 +1,32 @@
+﻿using NLog;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Bongda88.Helpers
+{
+    public class LogHelper
+    {
+        private static readonly ILogger _log = LogManager.GetCurrentClassLogger();
+
+        public static void Log(string format, params object[] args)
+        {
+            try
+            {
+                format = format.Replace("{", "[{").Replace("}", "}]");
+                var msg = string.Format(format, args);
+
+                _log.Info(msg);
+                Debug.WriteLine(msg);
+            }
+            catch(Exception)
+            {
+                Debug.WriteLine("format error: {0} with {1} parameters", format, args.Length, 1);
+                _log.Info("format error: {0} with {1} parameters", format, args.Length, 1);
+            }
+        }
+    }
+}

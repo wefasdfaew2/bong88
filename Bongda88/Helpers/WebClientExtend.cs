@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Bongda88.Helpers
 {
-    public class WebRequestExtend : WebClient
+    public class WebClientExtend : WebClient
     {
         public CookieContainer Cookies { get; set; }
 
-        public WebRequestExtend()
+        public WebClientExtend()
             : base()
         {
             this.Cookies = new CookieContainer();
@@ -29,7 +29,7 @@ namespace Bongda88.Helpers
             request.AutomaticDecompression = DecompressionMethods.GZip;
             request.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.12) Gecko/20101026 Firefox/3.6.12";
             request.CookieContainer = this.Cookies;
-            request.Timeout = 10000;
+            request.Timeout = 30000;
 
             return request;
         }
