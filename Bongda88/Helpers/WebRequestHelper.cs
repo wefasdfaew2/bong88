@@ -53,7 +53,10 @@ namespace Bongda88.Helpers
                 var inputs = Regex.Matches(formHtml, "<input.*name=['\"](.*?)['\"].*value=['\"](.*?)['\"].*>");
                 foreach (Match input in inputs)
                 {
-                    dic[input.Groups[1].Value] = input.Groups[2].Value;
+                    var name = input.Groups[1].Value;
+                    var value = input.Groups[2].Value;
+                    LogHelper.Log("input name={0} value={1}", name, value);
+                    dic[name] = value;
                 }
             }
 
