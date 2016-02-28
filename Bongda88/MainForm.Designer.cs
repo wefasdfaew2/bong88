@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.loginButton = new System.Windows.Forms.Button();
-            this.web = new System.Windows.Forms.WebBrowser();
+            this.web2 = new System.Windows.Forms.WebBrowser();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -42,13 +42,16 @@
             this.loginButton.Text = "Login";
             this.loginButton.UseVisualStyleBackColor = true;
             // 
-            // web
+            // web2
             // 
-            this.web.Location = new System.Drawing.Point(208, 12);
-            this.web.MinimumSize = new System.Drawing.Size(20, 20);
-            this.web.Name = "web";
-            this.web.Size = new System.Drawing.Size(250, 250);
-            this.web.TabIndex = 1;
+            this.web2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.web2.Location = new System.Drawing.Point(12, 70);
+            this.web2.MinimumSize = new System.Drawing.Size(20, 20);
+            this.web2.Name = "web2";
+            this.web2.Size = new System.Drawing.Size(446, 343);
+            this.web2.TabIndex = 1;
             // 
             // button1
             // 
@@ -66,7 +69,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(470, 425);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.web);
+            this.Controls.Add(this.web2);
             this.Controls.Add(this.loginButton);
             this.Name = "MainForm";
             this.Text = "Form1";
@@ -77,7 +80,7 @@
         #endregion
 
         private System.Windows.Forms.Button loginButton;
-        private System.Windows.Forms.WebBrowser web;
+        private System.Windows.Forms.WebBrowser web2;
         private System.Windows.Forms.Button button1;
     }
 }

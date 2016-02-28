@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bongda88", "Bongda88\Bongda
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFunc", "TestFunc\TestFunc.csproj", "{88342CCC-B038-40EE-B16D-CB7551BCFD14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bong88.Detecas", "Bong88.Detecas\Bong88.Detecas.csproj", "{04412EB4-32E0-42C2-97EB-E1D066A89E16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{88342CCC-B038-40EE-B16D-CB7551BCFD14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88342CCC-B038-40EE-B16D-CB7551BCFD14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88342CCC-B038-40EE-B16D-CB7551BCFD14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04412EB4-32E0-42C2-97EB-E1D066A89E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04412EB4-32E0-42C2-97EB-E1D066A89E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04412EB4-32E0-42C2-97EB-E1D066A89E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04412EB4-32E0-42C2-97EB-E1D066A89E16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

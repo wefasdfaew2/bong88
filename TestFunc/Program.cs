@@ -16,6 +16,14 @@ namespace TestFunc
     {
         static string GetHtmlPage(string strURL)
         {
+            using (var client = new WebClient())
+            {
+                var di = client.DownloadString("http://sc.detecas.com/di/activator.ashx");
+            }
+
+
+            Console.ReadLine();
+
             String strResult;
             WebRequest objRequest = WebRequest.Create(strURL) as HttpWebRequest;
             WebResponse objResponse = objRequest.GetResponse() as HttpWebResponse;
@@ -35,6 +43,13 @@ namespace TestFunc
 
         static void Main(string[] args)
         {
+            using (var client = new WebClient())
+            {
+                var di = client.DownloadString("http://sc.detecas.com/di/activator.ashx");
+            }
+
+            Console.ReadLine();
+
             // var resp = GetHtmlPage("http://www.bong88.com");
             var hp = new HtmlDocument();
             //hp.Load(@"C:\HtmlDocs\test.html"); // load a file
