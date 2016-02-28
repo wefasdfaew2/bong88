@@ -1,4 +1,5 @@
 ﻿using Bongda88.Helpers;
+using CsQuery;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,11 +10,16 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HtmlParserSharp;
+using HtmlParserSharp.Common;
+using HtmlParserSharp.Core;
 
 namespace Bongda88
 {
     public partial class MainForm : Form
     {
+        private Timer timer = new Timer();
+
         public MainForm()
         {
             InitializeComponent();
@@ -24,12 +30,74 @@ namespace Bongda88
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            using (var web = new WebClientExtend())
+            web.DocumentCompleted += web_DocumentCompleted;
+            web.FileDownload += web_FileDownload;
+            web.Navigate("http://www.bong88.com/login888.aspx");
+
+            //var dom = CQ.CreateFromUrl("http://www.bong88.com/login888.aspx");
+            //var html = dom.Render();
+
+            //using (var web = new WebClientExtend())
+            //{
+            //    // download main page
+            //    web.DownloadStringAsync(new Uri("http://www.bong88.com/login888.aspx"));
+            //    web.DownloadStringCompleted += web_DownloadStringCompleted;
+            //}
+        }
+
+        void web_FileDownload(object sender, EventArgs e)
+        {
+            Log("\r\n---------\r\nfile downloaded\r\n--------\r\n");
+            var w = sender as WebBrowser;
+            Log(w.DocumentText);
+        }
+
+        void web_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            var w = sender as WebBrowser;
+            Log("\r\n---------\r\ndocument completed\r\n--------\r\n");
+            Log(w.DocumentText);
+            // Application.DoEvents();
+
+            if (!timer.Enabled)
             {
-                // download main page
-                web.DownloadStringAsync(new Uri("http://www.bong88.com/login888.aspx"));
-                web.DownloadStringCompleted += web_DownloadStringCompleted;
+                
+                timer.Interval = 1000;
+                timer.Tick += delegate
+                {
+                    Log("new tick");
+                    HtmlElement target = web.Document.GetElementById("__di");
+                    if (target != null)
+                    {
+                        target.AttachEventHandler("onpropertychange", handler);
+                    }
+                };
+                timer.Enabled = true;
             }
+
+            string url = e.Url.ToString();
+            if (!(url.StartsWith("http://") || url.StartsWith("https://")))
+            {
+                // in AJAX
+            }
+
+            if (e.Url.AbsolutePath != w.Url.AbsolutePath)
+            {
+                // IFRAME 
+            }
+            else
+            {
+                // REAL DOCUMENT COMPLETE
+            }
+        }
+
+        private void handler(object sender, EventArgs e)
+        {
+            HtmlElement div = web.Document.GetElementById("__di");
+            if (div == null) return;
+            var content = div.InnerHtml;
+
+            Log("content: \r\n{0}", content);
         }
 
         private async void web_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
@@ -92,5 +160,11 @@ namespace Bongda88
             LogHelper.Log(format, args);
         }
         #endregion
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var html = web.DocumentText;
+            Log("current html:\r\n{0}", html);
+        }
     }
 }
