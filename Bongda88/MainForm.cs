@@ -21,9 +21,9 @@ namespace Bongda88
 {
     public partial class MainForm : Form
     {
-        private Timer timer = new Timer();
-        WebBrowser web = new WebBrowser();
-        string html = string.Empty;
+        // private WebBrowser web = new WebBrowser();
+        private string _html = string.Empty;
+        private bool _canPerformLogin = false;
 
         public MainForm()
         {
@@ -34,72 +34,136 @@ namespace Bongda88
             loginButton.Click += loginButton_Click;
         }
 
-        private void loginButton_Click(object sender, EventArgs e)
+        private void SetButtonStatus(string text, bool isEnabled=true)
         {
-            /*
-            var loginForm = WebRequestHelper.GetFormInputs(html, "frmLogin");
-            loginForm["txtID"] = "SSD020101001";
-            loginForm["txtPW"] = "2e35d5afcff48d3e25a6f407b815cb7c";
-
-            var loginPacket = WebRequestHelper.GetUrlEncoded(loginForm);
-
-            var encoding = Encoding.UTF8;
-            var post = encoding.GetBytes(loginPacket);
-            */
-
-            var doc = web.Document;
-            doc.GetElementById("txtID").InnerText = "SSD020101001";
-            doc.GetElementById("txtPW").InnerText = "Qqqq1111";
-            // var submit = doc.GetElementById("");
-            var links = doc.GetElementsByTagName("a");
-            var count = links.Count;
-            for (int i = 0; i < count; i++)
+            Invoke(new Action(() =>
             {
-                var inner = links[i].InnerHtml;
+                loginButton.Text = text;
+                loginButton.Enabled = isEnabled;
+            }));
+        }
 
-                if (!string.IsNullOrEmpty(inner) && inner.Equals("<span>Go</span>", StringComparison.OrdinalIgnoreCase))
+        private async Task OnLogin(WebBrowser web)
+        {
+            if (!_canPerformLogin)
+            {
+                Log("cannot do `Login` action because document do not loaded yet");
+                LogUI("cannot do `Login` action because document do not loaded yet");
+                return;
+            }
+
+            _canPerformLogin = false;
+            Log("Perfoming login");
+
+            await Task.Delay(50);
+
+            Invoke(new Action(() =>
+            {
+                if (web == null)
                 {
-                    object o = links[i].InvokeMember("click");
+                    LogUI("web browser not found");
                 }
 
-            }
-            // submit.cl
+                HtmlDocument doc = null;
 
+                try
+                {
+                    doc = web.Document;
+                }
+                catch (Exception ex)
+                {
+                    Log(ex.Message);
+                    LogUI(ex.Message);
 
-            //web.Navigate("http://www.bong88.com/ProcessLogin.aspx", string.Empty, post, "Content-Type: application/x-www-form-urlencoded");
+                    return;
+                }
 
+                var userInput = doc.GetElementById("txtID");
+                var passInput = doc.GetElementById("txtPW");
+
+                if (userInput == null || passInput == null)
+                {
+                    Log("input not found");
+                    return;
+                }
+
+                userInput.InnerText = "SSD020101001";
+                passInput.InnerText = "Qqqq1111";
+
+                var links = doc.GetElementsByTagName("a");
+                var count = links.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    var inner = links[i].InnerHtml;
+
+                    if (!string.IsNullOrEmpty(inner) &&
+                        inner.Equals("<span>Go</span>", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Log("found submit button, perform click action");
+                        LogUI("found submit button, perform click action");
+
+                        // Task.Run(() => );
+                        links[i].InvokeMember("click");
+                    }
+                }
+            }));
+        }
+
+        private void loginButton_Click(object sender, EventArgs e)
+        {
+            var web = new WebBrowser();
+            web.DocumentCompleted -= web_DocumentCompleted;
+            web.DocumentCompleted += web_DocumentCompleted;
+
+            web.Navigate("http://www.bong88.com/login888.aspx");
         }
 
         void web_FileDownload(object sender, EventArgs e)
         {
         }
 
-        async void web_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private async void web_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             var w = sender as WebBrowser;
-            //Log("\r\n---------\r\ndocument completed\r\n--------\r\n");
+            LogUI("document completed called");
             
-            //w.Navigate("javascript: window.external.CallServerSideCode();");
-            
-
             string url = e.Url.ToString();
             if (!(url.StartsWith("http://") || url.StartsWith("https://")))
             {
-                // in AJAX
-                Log("--------------------------\r\najax call\r\n----------------------------");
+                // AJAX
+                Log();
+                Log("ajax call");
+                LogUI("ajax call");
             }
 
             if (e.Url.AbsolutePath != w.Url.AbsolutePath)
             {
                 // IFRAME 
+                Log();
+                Log("iframe rendering");
+                LogUI("iframe rendering");
             }
             else
             {
                 // REAL DOCUMENT COMPLETE
-                Log("----------------------------------------\r\nrefresh\r\n---------------------------------------");
-                html = w.Document.GetElementsByTagName("HTML")[0].OuterHtml;
-                Log(html);
+                Log();
+                Log("document completed, downloading html content");
+                LogUI("document completed, downloading html content");
+                
+                _html = w.Document.GetElementsByTagName("HTML")[0].OuterHtml;
+                Log(_html);
+                LogResult(_html);
 
+                _canPerformLogin = true;
+
+                await Task.Run(async () => await OnLogin(w));
+
+                Invoke(new Action(() =>
+                {
+                    
+                }));
+
+                #region old stuff
                 /*
                 using (var req = new WebClientExtend())
                 {
@@ -124,29 +188,20 @@ namespace Bongda88
                     Log("login result: {0}", mainPage);
                 }
                 */
-                
-                //MessageBox.Show("completed");
+                #endregion
                 Log("....................................................");
             }
         }
 
-        private void handler(object sender, EventArgs e)
+        private void web_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
-            HtmlElement div = web2.Document.GetElementById("__di");
-            if (div == null) return;
-            var content = div.InnerHtml;
-
-            Log("content: \r\n{0}", content);
-        }
-
-        private async void web_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
+            /*
             Log("*******document completed********");
             Log(e.Result);
             object o = web2.Document.InvokeScript("Detecas.Core.start()");
             await Task.Delay(2000);
             Log(web2.DocumentText);
-            /*
+            
             var indexPage = e.Result;
 
             var web = sender as WebClientExtend;
@@ -198,15 +253,42 @@ namespace Bongda88
         private void MainForm_Load(object sender, EventArgs e)
         {
             //var web = new WebBrowser();
-            web.DocumentCompleted += web_DocumentCompleted;
+            //web.DocumentCompleted += web_DocumentCompleted;
             //web.ObjectForScripting = new MyScript();
             //web.FileDownload += web_FileDownload;
             //web.ScriptErrorsSuppressed = true;
-            web.Navigate("http://www.bong88.com/login888.aspx");
+            //web.Navigate("http://www.bong88.com/login888.aspx");
         }
 
         #region helpers
-        private void Log(string format, params object[] args)
+        private void LogResult(string html)
+        {
+            Invoke(new Action(() =>
+            {
+                ResultText.Text += html + "\r\n---------------------------------------------";
+            }));
+        }
+
+        private void LogUI(string format, params object[] args)
+        {
+            var msg = string.Empty;
+            try
+            {
+                msg = string.Format(format, args);
+            }
+            catch(Exception ex)
+            {
+                msg = ex.Message;
+            }
+
+            Invoke(new Action(() =>
+            {
+                var li = new ListViewItem(DateTime.Now.ToString("hh:mm:ss"));
+                li.SubItems.Add(msg);
+                LogList.Items.Add(li);
+            }));
+        }
+        private void Log(string format=null, params object[] args)
         {
             LogHelper.Log(format, args);
         }
@@ -214,12 +296,10 @@ namespace Bongda88
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Log("=======================================================");
-            var html = web.Document.GetElementsByTagName("HTML")[0].OuterHtml;
-            Log("current html:\r\n{0}", html);
-            Log("=======================================================");
+            
         }
 
+        /*
         [ComVisible(true)]
         public class MyScript
         {
@@ -231,5 +311,6 @@ namespace Bongda88
                 LogHelper.Log(renderedHtml);
             }
         }
+        */
     }
 }

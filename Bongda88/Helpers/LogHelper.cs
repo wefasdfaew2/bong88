@@ -12,8 +12,16 @@ namespace Bongda88.Helpers
     {
         private static readonly ILogger _log = LogManager.GetCurrentClassLogger();
 
-        public static void Log(string format, params object[] args)
+        public static void Log(string format=null, params object[] args)
         {
+            if (string.IsNullOrEmpty(format))
+            {
+                format = "------------------------------------------------------";
+                _log.Info(format);
+                Debug.WriteLine(format);
+                return;
+            }
+
             try
             {
                 format = format.Replace("{", "[{").Replace("}", "}]");
