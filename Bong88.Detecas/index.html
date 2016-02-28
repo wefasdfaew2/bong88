@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>bong88</title>
+</head>
+<body>
+    <div id="password"></div>
+    <div id="code"></div>
+    
+    <div id="result"></div>
+
+    <script>
+        var CFS = function (e) {
+            function t(e) {
+                for (var t = "", n = 1; n <= e.length; n++)
+                    t += e.charAt(n - 1).charCodeAt(0);
+                var a = new Number(t);
+                return t = a.toString(16)
+            }
+            var n, a, r = 30;
+            if (n = r - e.length,
+            n > 1)
+                for (var o = 1; n >= o; o++)
+                    e += String.fromCharCode(21);
+            for (var l = new Number(1), i = 1; r >= i; i++)
+                a = r + e.charAt(i - 1).charCodeAt(0) * i,
+                l *= a;
+            var d = new Number(l.toPrecision(15));
+            e = d.toString().toUpperCase();
+            for (var s = "", u = 1; u <= e.length; u++)
+                s += t(e.substring(u - 1, u + 2));
+            for (var m = "", u = 20; u <= s.length - 18; u += 2)
+                m += s.charAt(u - 1);
+            return m.toUpperCase()
+        };
+        //-------------------------------------------------------------
+        var MD5 = function (e) {
+            function t(e, t) {
+                return e << t | e >>> 32 - t
+            }
+            function n(e, t) {
+                var n, a, r, o, l;
+                return r = 2147483648 & e,
+                o = 2147483648 & t,
+                n = 1073741824 & e,
+                a = 1073741824 & t,
+                l = (1073741823 & e) + (1073741823 & t),
+                n & a ? 2147483648 ^ l ^ r ^ o : n | a ? 1073741824 & l ? 3221225472 ^ l ^ r ^ o : 1073741824 ^ l ^ r ^ o : l ^ r ^ o
+            }
+            function a(e, t, n) {
+                return e & t | ~e & n
+            }
+            function r(e, t, n) {
+                return e & n | t & ~n
+            }
+            function o(e, t, n) {
+                return e ^ t ^ n
+            }
+            function l(e, t, n) {
+                return t ^ (e | ~n)
+            }
+            function i(e, r, o, l, i, d, s) {
+                return e = n(e, n(n(a(r, o, l), i), s)),
+                n(t(e, d), r)
+            }
+            function d(e, a, o, l, i, d, s) {
+                return e = n(e, n(n(r(a, o, l), i), s)),
+                n(t(e, d), a)
+            }
+            function s(e, a, r, l, i, d, s) {
+                return e = n(e, n(n(o(a, r, l), i), s)),
+                n(t(e, d), a)
+            }
+            function u(e, a, r, o, i, d, s) {
+                return e = n(e, n(n(l(a, r, o), i), s)),
+                n(t(e, d), a)
+            }
+            function m(e) {
+                for (var t, n = e.length, a = n + 8, r = (a - a % 64) / 64, o = 16 * (r + 1), l = Array(o - 1), i = 0, d = 0; n > d;)
+                    t = (d - d % 4) / 4,
+                    i = d % 4 * 8,
+                    l[t] = l[t] | e.charCodeAt(d) << i,
+                    d++;
+                return t = (d - d % 4) / 4,
+                i = d % 4 * 8,
+                l[t] = l[t] | 128 << i,
+                l[o - 2] = n << 3,
+                l[o - 1] = n >>> 29,
+                l
+            }
+            function c(e) {
+                e = e.replace(/\r\n/g, "\n");
+                for (var t = "", n = 0; n < e.length; n++) {
+                    var a = e.charCodeAt(n);
+                    128 > a ? t += String.fromCharCode(a) : a > 127 && 2048 > a ? (t += String.fromCharCode(a >> 6 | 192),
+                    t += String.fromCharCode(63 & a | 128)) : (t += String.fromCharCode(a >> 12 | 224),
+                    t += String.fromCharCode(a >> 6 & 63 | 128),
+                    t += String.fromCharCode(63 & a | 128))
+                }
+                return t
+            }
+            var f, p, v, g, y, h, b, C, O, B = Array(), S = 7, I = 12, E = 17, _ = 22, x = 5, T = 9, F = 14, M = 20, L = 4, w = 11, k = 16, $ = 23, A = 6, H = 10, P = 15, N = 21;
+            for (e = c(e),
+            B = m(e),
+            h = 1732584193,
+            b = 4023233417,
+            C = 2562383102,
+            O = 271733878,
+            f = 0; f < B.length; f += 16)
+                p = h,
+                v = b,
+                g = C,
+                y = O,
+                h = i(h, b, C, O, B[f + 0], S, 3614090360),
+                O = i(O, h, b, C, B[f + 1], I, 3905402710),
+                C = i(C, O, h, b, B[f + 2], E, 606105819),
+                b = i(b, C, O, h, B[f + 3], _, 3250441966),
+                h = i(h, b, C, O, B[f + 4], S, 4118548399),
+                O = i(O, h, b, C, B[f + 5], I, 1200080426),
+                C = i(C, O, h, b, B[f + 6], E, 2821735955),
+                b = i(b, C, O, h, B[f + 7], _, 4249261313),
+                h = i(h, b, C, O, B[f + 8], S, 1770035416),
+                O = i(O, h, b, C, B[f + 9], I, 2336552879),
+                C = i(C, O, h, b, B[f + 10], E, 4294925233),
+                b = i(b, C, O, h, B[f + 11], _, 2304563134),
+                h = i(h, b, C, O, B[f + 12], S, 1804603682),
+                O = i(O, h, b, C, B[f + 13], I, 4254626195),
+                C = i(C, O, h, b, B[f + 14], E, 2792965006),
+                b = i(b, C, O, h, B[f + 15], _, 1236535329),
+                h = d(h, b, C, O, B[f + 1], x, 4129170786),
+                O = d(O, h, b, C, B[f + 6], T, 3225465664),
+                C = d(C, O, h, b, B[f + 11], F, 643717713),
+                b = d(b, C, O, h, B[f + 0], M, 3921069994),
+                h = d(h, b, C, O, B[f + 5], x, 3593408605),
+                O = d(O, h, b, C, B[f + 10], T, 38016083),
+                C = d(C, O, h, b, B[f + 15], F, 3634488961),
+                b = d(b, C, O, h, B[f + 4], M, 3889429448),
+                h = d(h, b, C, O, B[f + 9], x, 568446438),
+                O = d(O, h, b, C, B[f + 14], T, 3275163606),
+                C = d(C, O, h, b, B[f + 3], F, 4107603335),
+                b = d(b, C, O, h, B[f + 8], M, 1163531501),
+                h = d(h, b, C, O, B[f + 13], x, 2850285829),
+                O = d(O, h, b, C, B[f + 2], T, 4243563512),
+                C = d(C, O, h, b, B[f + 7], F, 1735328473),
+                b = d(b, C, O, h, B[f + 12], M, 2368359562),
+                h = s(h, b, C, O, B[f + 5], L, 4294588738),
+                O = s(O, h, b, C, B[f + 8], w, 2272392833),
+                C = s(C, O, h, b, B[f + 11], k, 1839030562),
+                b = s(b, C, O, h, B[f + 14], $, 4259657740),
+                h = s(h, b, C, O, B[f + 1], L, 2763975236),
+                O = s(O, h, b, C, B[f + 4], w, 1272893353),
+                C = s(C, O, h, b, B[f + 7], k, 4139469664),
+                b = s(b, C, O, h, B[f + 10], $, 3200236656),
+                h = s(h, b, C, O, B[f + 13], L, 681279174),
+                O = s(O, h, b, C, B[f + 0], w, 3936430074),
+                C = s(C, O, h, b, B[f + 3], k, 3572445317),
+                b = s(b, C, O, h, B[f + 6], $, 76029189),
+                h = s(h, b, C, O, B[f + 9], L, 3654602809),
+                O = s(O, h, b, C, B[f + 12], w, 3873151461),
+                C = s(C, O, h, b, B[f + 15], k, 530742520),
+                b = s(b, C, O, h, B[f + 2], $, 3299628645),
+                h = u(h, b, C, O, B[f + 0], A, 4096336452),
+                O = u(O, h, b, C, B[f + 7], H, 1126891415),
+                C = u(C, O, h, b, B[f + 14], P, 2878612391),
+                b = u(b, C, O, h, B[f + 5], N, 4237533241),
+                h = u(h, b, C, O, B[f + 12], A, 1700485571),
+                O = u(O, h, b, C, B[f + 3], H, 2399980690),
+                C = u(C, O, h, b, B[f + 10], P, 4293915773),
+                b = u(b, C, O, h, B[f + 1], N, 2240044497),
+                h = u(h, b, C, O, B[f + 8], A, 1873313359),
+                O = u(O, h, b, C, B[f + 15], H, 4264355552),
+                C = u(C, O, h, b, B[f + 6], P, 2734768916),
+                b = u(b, C, O, h, B[f + 13], N, 1309151649),
+                h = u(h, b, C, O, B[f + 4], A, 4149444226),
+                O = u(O, h, b, C, B[f + 11], H, 3174756917),
+                C = u(C, O, h, b, B[f + 2], P, 718787259),
+                b = u(b, C, O, h, B[f + 9], N, 3951481745),
+                h = n(h, p),
+                b = n(b, v),
+                C = n(C, g),
+                O = n(O, y);
+            var D = WordToHex(h) + WordToHex(b) + WordToHex(C) + WordToHex(O);
+            return D.toLowerCase()
+        };
+        //-------------------------------------------------------------
+        function getPassCode() {
+
+            var password = document.getElementById("password").innerText;
+            var code = document.getElementById("code").innerText;
+
+            var b = CFS(password);
+            var d = b + codec;
+            password.value = MD5(d);
+
+            var result = MD5(d);
+
+            document.getElementById("result").innerText = result;
+
+            return result;
+        }
+    </script>
+</body>
+</html>

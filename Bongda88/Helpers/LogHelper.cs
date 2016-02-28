@@ -12,7 +12,7 @@ namespace Bongda88.Helpers
     {
         private static readonly ILogger _log = LogManager.GetCurrentClassLogger();
 
-        public static void Log(string format=null, params object[] args)
+        public static void Log(string format = null, params object[] args)
         {
             if (string.IsNullOrEmpty(format))
             {
@@ -30,10 +30,10 @@ namespace Bongda88.Helpers
                 _log.Info(msg);
                 Debug.WriteLine(msg);
             }
-            catch(Exception)
+            catch (Exception)
             {
-                Debug.WriteLine("format error: {0} with {1} parameters", format, args.Length, 1);
-                _log.Info("format error: {0} with {1} parameters", format, args.Length, 1);
+                Debug.WriteLine("format error: \r\n------\r\n{0}\r\n------ with {1} parameters", format, args.Length, 1);
+                _log.Info("format error: \r\n------\r\n{0}\r\n------ with {1} parameters", format, args.Length, 1);
             }
         }
     }
